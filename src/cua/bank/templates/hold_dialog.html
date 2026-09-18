@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Processing Hold</title>
+  <link rel="stylesheet" href="/bank/static/corelink.css">
+</head>
+<body class="page">
+  <div class="modal">
+    <h3>Core processing hold</h3>
+    <p>A batch job is holding this record. This notice is not part of the usual lookup flow.</p>
+    <form method="get" action="/bank/ws/results">
+      <input type="hidden" name="member_id" value="12345">
+      <input type="submit" value="Continue">
+    </form>
+  </div>
+</body>
+</html>

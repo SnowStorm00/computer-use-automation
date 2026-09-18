@@ -1,0 +1,35 @@
+id: default
+allowed_origins:
+  - http://127.0.0.1:8080
+  - http://localhost:8080
+allowed_path_prefixes:
+  - /bank
+allowed_actions:
+  - navigate
+  - click
+  - fill
+  - press
+  - extract
+  - wait
+  - dismiss_dialog
+  - human
+blocked_actions:
+  - evaluate_js
+  - download
+  - file_upload
+risky_url_patterns:
+  - /bank/ws/subaccount/.*/submit
+  - /bank/ws/confirm
+irreversible_text:
+  - Open Sub-Account
+  - Confirm Open
+  - Submit Application
+secret_keys:
+  - password
+  - passwd
+  - token
+  - secret
+  - authorization
+  - ssn
+  - tin
+  - account_number

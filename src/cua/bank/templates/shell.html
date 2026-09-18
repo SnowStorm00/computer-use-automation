@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CoreLink Member Servicing</title>
+  <link rel="stylesheet" href="/bank/static/corelink.css">
+</head>
+<body>
+  <div class="topbar">
+    CoreLink Member Servicing v4.2
+    <span>{{ operator }} | Institution 0001 | <a href="/bank/logout" style="color:#fff">Sign Off</a></span>
+  </div>
+  <table class="shell">
+    <tr>
+      <td class="nav">
+        <b>Functions</b><br>
+        <a href="/bank/ws/search" target="workspace">Member Lookup</a>
+        <a href="/bank/ws/search" target="workspace">Open Sub-Account</a>
+        <div class="footer">Host: CORE-A<br>Region: US-SE</div>
+      </td>
+      <td class="workspace">
+        <iframe class="ws" name="workspace" src="/bank/ws/search" title="workspace"></iframe>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

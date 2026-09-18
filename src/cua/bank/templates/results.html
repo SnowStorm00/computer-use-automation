@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Results</title>
+  <link rel="stylesheet" href="/bank/static/corelink.css">
+</head>
+<body class="page">
+  <h2>Search Results</h2>
+  <table class="grid">
+    <tr>
+      <th>Member ID</th>
+      <th>Name</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td><a href="/bank/ws/member/{{ member.id }}">{{ member.id }}</a></td>
+      <td>{{ member.name }}</td>
+      <td>{{ member.status }}</td>
+    </tr>
+  </table>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Member {{ member.id }}</title>
+  <link rel="stylesheet" href="/bank/static/corelink.css">
+</head>
+<body class="page">
+  <h2>Member Record</h2>
+  <table class="grid">
+    <tr><td>Member ID</td><td>{{ member.id }}</td></tr>
+    <tr><td>Name</td><td>{{ member.name }}</td></tr>
+    <tr><td>TIN</td><td>{{ member.tin }}</td></tr>
+    <tr><td>Status</td><td>{{ member.status }}</td></tr>
+    <tr><td>Checking Balance</td><td>${{ member.checking }}</td></tr>
+    <tr><td>Savings Balance</td><td>${{ member.savings }}</td></tr>
+  </table>
+  <p>
+    <a href="/bank/ws/subaccount/{{ member.id }}">Open Sub-Account</a>
+    &nbsp;|&nbsp;
+    <a href="/bank/ws/search">New Search</a>
+  </p>
+</body>
+</html>

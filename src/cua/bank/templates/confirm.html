@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Confirmation</title>
+  <link rel="stylesheet" href="/bank/static/corelink.css">
+</head>
+<body class="page">
+  <h2>Sub-Account Opened</h2>
+  <table class="grid">
+    <tr><td>Confirmation Number</td><td>{{ confirmation }}</td></tr>
+    <tr><td>Member ID</td><td>{{ member.id }}</td></tr>
+    <tr><td>Member Name</td><td>{{ member.name }}</td></tr>
+    <tr><td>Product</td><td>{{ product }}</td></tr>
+    <tr><td>Initial Deposit</td><td>${{ amount }}</td></tr>
+  </table>
+  <p><a href="/bank/ws/search">Return to Lookup</a></p>
+</body>
+</html>

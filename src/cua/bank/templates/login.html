@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CoreLink Member Servicing - Sign On</title>
+  <link rel="stylesheet" href="/bank/static/corelink.css">
+</head>
+<body>
+  <div class="topbar">CoreLink Member Servicing v4.2</div>
+  <div class="login-wrap">
+    <h1>Operator Sign On</h1>
+    {% if error == "required" %}
+      <div class="error">Operator ID and password are required.</div>
+    {% elif error == "invalid" %}
+      <div class="error">Sign-on failed. Check operator ID and password.</div>
+    {% endif %}
+    <form method="post" action="/bank/login">
+      <table>
+        <tr>
+          <td>Operator ID</td>
+          <td><input type="text" name="operator_id"></td>
+        </tr>
+        <tr>
+          <td>Password</td>
+          <td><input type="password" name="password"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><input type="submit" value="Sign On"></td>
+        </tr>
+      </table>
+    </form>
+    <div class="footer">Authorized personnel only. Session activity is logged.</div>
+  </div>
+</body>
+</html>

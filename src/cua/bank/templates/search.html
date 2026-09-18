@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Member Lookup</title>
+  <link rel="stylesheet" href="/bank/static/corelink.css">
+</head>
+<body class="page">
+  <h2>Member Lookup</h2>
+  {% if notice %}
+    <div class="notice">{{ notice }}</div>
+  {% endif %}
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+  <form method="get" action="/bank/ws/results">
+    <table>
+      <tr>
+        <td>Member ID</td>
+        <td><input type="text" name="member_id"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" value="Search"></td>
+      </tr>
+    </table>
+  </form>
+  <div class="footer">Enter a 5-digit member number. Do not use SSN in this field.</div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Operator handoff</title>
+  <style>
+    body { font-family: Georgia, serif; margin: 0; background: #1c2430; color: #eee; }
+    header { background: #111; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; }
+    h1 { font-size: 16px; margin: 0; font-weight: normal; }
+    .badge { padding: 2px 8px; border-radius: 3px; background: #664; font-size: 12px; }
+    .badge.human { background: #a63; }
+    main { display: grid; grid-template-columns: 1fr 300px; gap: 16px; padding: 16px; }
+    img { max-width: 100%; border: 1px solid #445; cursor: crosshair; background: #000; }
+    aside { background: #16202c; padding: 12px; }
+    aside p { font-size: 13px; line-height: 1.4; }
+    label { display: block; margin-top: 10px; font-size: 12px; color: #aaa; }
+    input, button { font: inherit; }
+    input[type=text] { width: 100%; box-sizing: border-box; padding: 6px; }
+    button { margin-top: 8px; margin-right: 6px; padding: 6px 10px; }
+    .log { font-family: Consolas, monospace; font-size: 11px; white-space: pre-wrap; color: #9ab; max-height: 240px; overflow: auto; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CoreLink operator handoff</h1>
+    <div id="badge" class="badge">waiting</div>
+  </header>
+  <main>
+    <section>
+      <img id="shot" alt="live session">
+      <p style="font-size:12px;color:#889">Click the screenshot to click the live session. Same browser the automation paused.</p>
+    </section>
+    <aside>
+      <div id="meta">No live session yet. Start a discover or replay that escalates.</div>
+      <label>Type into focused field</label>
+      <input id="typed" type="text">
+      <button id="send">Type</button>
+      <button id="enter">Press Enter</button>
+      <button id="resume">Hand back / resume</button>
+      <label>Human actions this pause</label>
+      <div id="log" class="log"></div>
+    </aside>
+  </main>
+<script>
+let sessionId = new URLSearchParams(location.search).get("session") || "latest";
+let img = document.getElementById("shot");
+
+async function refresh() {
+  const r = await fetch("/api/sessions/" + sessionId);
+  if (!r.ok) {
+    document.getElementById("meta").textContent = "No live session.";
+    return;
+  }
+  const s = await r.json();
+  sessionId = s.session_id;
+  document.getElementById("badge").textContent = s.control;
+  document.getElementById("badge").className = "badge " + s.control;
+  const iv = s.intervention || {};
+  document.getElementById("meta").innerHTML =
+    "<p><b>Goal</b><br>" + (s.goal || "") + "</p>" +
+    "<p><b>Why it stopped</b><br>" + (iv.reason || "—") + "</p>" +
+    "<p><b>Step</b> " + (iv.step_id || s.step_index) + "</p>";
+  document.getElementById("log").textContent = JSON.stringify(s.human_steps || [], null, 2);
+  img.src = "/api/sessions/" + sessionId + "/screenshot?t=" + Date.now();
+}
+setInterval(refresh, 1500);
+refresh();
+
+img.addEventListener("click", async (e) => {
+  const rect = img.getBoundingClientRect();
+  const x = (e.clientX - rect.left) * (img.naturalWidth / rect.width);
+  const y = (e.clientY - rect.top) * (img.naturalHeight / rect.height);
+  await fetch("/api/sessions/" + sessionId + "/click", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({x, y})
+  });
+  refresh();
+});
+
+document.getElementById("send").onclick = async () => {
+  const text = document.getElementById("typed").value;
+  await fetch("/api/sessions/" + sessionId + "/type", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({text})
+  });
+  document.getElementById("typed").value = "";
+  refresh();
+};
+document.getElementById("enter").onclick = async () => {
+  await fetch("/api/sessions/" + sessionId + "/press", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({key: "Enter"})
+  });
+  refresh();
+};
+document.getElementById("resume").onclick = async () => {
+  await fetch("/api/sessions/" + sessionId + "/resume", {method: "POST"});
+  refresh();
+};
+</script>
+</body>
+</html>

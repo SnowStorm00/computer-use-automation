@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Open Sub-Account</title>
+  <link rel="stylesheet" href="/bank/static/corelink.css">
+</head>
+<body class="page">
+  <h2>Open Sub-Account</h2>
+  <p>Member {{ member.id }} — {{ member.name }}</p>
+  {% if error == "required" %}
+    <div class="error">Product and initial deposit are required.</div>
+  {% elif error == "amount" %}
+    <div class="error">Initial deposit must be a positive amount.</div>
+  {% endif %}
+  <form method="post" action="/bank/ws/subaccount/{{ member.id }}/submit">
+    <table>
+      <tr>
+        <td>Product</td>
+        <td>
+          <select name="product">
+            <option value="">-- select --</option>
+            <option value="Share Savings">Share Savings</option>
+            <option value="Money Market">Money Market</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Initial Deposit</td>
+        <td><input type="text" name="amount"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><input type="submit" value="Confirm Open"></td>
+      </tr>
+    </table>
+  </form>
+</body>
+</html>

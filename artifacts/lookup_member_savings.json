@@ -1,0 +1,281 @@
+{
+  "schema_version": "1.0.0",
+  "id": "lookup_member_savings",
+  "name": "Lookup member savings balance",
+  "description": "Sign on to CoreLink, look up a member by ID, and return the savings balance.",
+  "version": 1,
+  "approval_state": "approved",
+  "app": {
+    "vendor": "corelink",
+    "product": "member-servicing",
+    "surface_kind": "web",
+    "version_range": "4.x",
+    "entry_url": "http://127.0.0.1:8080/bank/login"
+  },
+  "parameters": [
+    {
+      "name": "member_id",
+      "type": "string",
+      "required": true,
+      "description": "Member number supplied by the calling agent.",
+      "example": "12345",
+      "source": "input",
+      "sensitive": false
+    },
+    {
+      "name": "operator_id",
+      "type": "string",
+      "required": true,
+      "description": "Injected from the operator vault, never stored as a literal.",
+      "example": null,
+      "source": "secret",
+      "sensitive": true
+    },
+    {
+      "name": "operator_password",
+      "type": "string",
+      "required": true,
+      "description": "Injected from the operator vault, never stored as a literal.",
+      "example": null,
+      "source": "secret",
+      "sensitive": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "savings_balance",
+      "type": "string",
+      "description": "Current savings balance as shown on the member record.",
+      "sensitive": false
+    }
+  ],
+  "steps": [
+    {
+      "id": "s01",
+      "kind": "navigate",
+      "target": null,
+      "value": "http://127.0.0.1:8080/bank/login",
+      "press_key": null,
+      "extract_as": null,
+      "timeout_ms": 15000,
+      "risk": "normal",
+      "note": "open sign-on"
+    },
+    {
+      "id": "s02",
+      "kind": "fill",
+      "target": {
+        "description": "Operator ID",
+        "frames": [],
+        "locators": [
+          {"strategy": "name_attr", "value": "operator_id", "role": null, "exact": false, "nth": null},
+          {"strategy": "label", "value": "Operator ID", "role": null, "exact": false, "nth": null}
+        ]
+      },
+      "value": "{{secrets.operator_id}}",
+      "press_key": null,
+      "extract_as": null,
+      "timeout_ms": 15000,
+      "risk": "normal",
+      "note": null
+    },
+    {
+      "id": "s03",
+      "kind": "fill",
+      "target": {
+        "description": "Password",
+        "frames": [],
+        "locators": [
+          {"strategy": "name_attr", "value": "password", "role": null, "exact": false, "nth": null},
+          {"strategy": "placeholder", "value": "Password", "role": null, "exact": false, "nth": null}
+        ]
+      },
+      "value": "{{secrets.operator_password}}",
+      "press_key": null,
+      "extract_as": null,
+      "timeout_ms": 15000,
+      "risk": "normal",
+      "note": null
+    },
+    {
+      "id": "s04",
+      "kind": "click",
+      "target": {
+        "description": "Sign On",
+        "frames": [],
+        "locators": [
+          {"strategy": "role", "value": "Sign On", "role": "button", "exact": false, "nth": null},
+          {"strategy": "css", "value": "input[type='submit'][value='Sign On']", "role": null, "exact": false, "nth": null}
+        ]
+      },
+      "value": null,
+      "press_key": null,
+      "extract_as": null,
+      "timeout_ms": 15000,
+      "risk": "normal",
+      "note": null
+    },
+    {
+      "id": "s05",
+      "kind": "wait",
+      "target": {
+        "description": "Member ID field in workspace",
+        "frames": [{"by": "name", "value": "workspace"}],
+        "locators": [
+          {"strategy": "name_attr", "value": "member_id", "role": null, "exact": false, "nth": null}
+        ]
+      },
+      "value": null,
+      "press_key": null,
+      "extract_as": null,
+      "timeout_ms": 15000,
+      "risk": "normal",
+      "note": null
+    },
+    {
+      "id": "s06",
+      "kind": "fill",
+      "target": {
+        "description": "Member ID",
+        "frames": [{"by": "name", "value": "workspace"}],
+        "locators": [
+          {"strategy": "name_attr", "value": "member_id", "role": null, "exact": false, "nth": null},
+          {"strategy": "role", "value": "Member ID", "role": "textbox", "exact": false, "nth": null}
+        ]
+      },
+      "value": "{{member_id}}",
+      "press_key": null,
+      "extract_as": null,
+      "timeout_ms": 15000,
+      "risk": "normal",
+      "note": null
+    },
+    {
+      "id": "s07",
+      "kind": "click",
+      "target": {
+        "description": "Search",
+        "frames": [{"by": "name", "value": "workspace"}],
+        "locators": [
+          {"strategy": "role", "value": "Search", "role": "button", "exact": false, "nth": null},
+          {"strategy": "css", "value": "input[type='submit'][value='Search']", "role": null, "exact": false, "nth": null}
+        ]
+      },
+      "value": null,
+      "press_key": null,
+      "extract_as": null,
+      "timeout_ms": 15000,
+      "risk": "normal",
+      "note": null
+    },
+    {
+      "id": "s08",
+      "kind": "click",
+      "target": {
+        "description": "member record link",
+        "frames": [{"by": "name", "value": "workspace"}],
+        "locators": [
+          {"strategy": "role", "value": "{{member_id}}", "role": "link", "exact": true, "nth": null},
+          {"strategy": "text", "value": "{{member_id}}", "role": null, "exact": true, "nth": null}
+        ]
+      },
+      "value": null,
+      "press_key": null,
+      "extract_as": null,
+      "timeout_ms": 15000,
+      "risk": "normal",
+      "note": null
+    },
+    {
+      "id": "s09",
+      "kind": "extract",
+      "target": {
+        "description": "Savings Balance",
+        "frames": [{"by": "name", "value": "workspace"}],
+        "locators": [
+          {"strategy": "cell_after_label", "value": "Savings Balance", "role": null, "exact": false, "nth": null}
+        ]
+      },
+      "value": null,
+      "press_key": null,
+      "extract_as": "savings_balance",
+      "timeout_ms": 15000,
+      "risk": "normal",
+      "note": "legacy table: label in first cell, value in the next"
+    }
+  ],
+  "success_checkpoint": {
+    "kind": "text_visible",
+    "url_pattern": null,
+    "text": "Savings Balance",
+    "target": null
+  },
+  "exception_rules": [
+    {
+      "code": "MEMBER_NOT_FOUND",
+      "class": "business_outcome",
+      "detect": {"kind": "text_visible", "url_pattern": null, "text": "No member found", "target": null},
+      "action": "return",
+      "dismiss_target": null,
+      "max_retries": 2,
+      "message": "No member matched the given ID."
+    },
+    {
+      "code": "ACCESS_DENIED",
+      "class": "business_outcome",
+      "detect": {"kind": "text_visible", "url_pattern": null, "text": "Access denied", "target": null},
+      "action": "return",
+      "dismiss_target": null,
+      "max_retries": 2,
+      "message": "Operator is not permitted to view this member."
+    },
+    {
+      "code": "VALIDATION_ERROR",
+      "class": "business_outcome",
+      "detect": {"kind": "text_visible", "url_pattern": null, "text": "Member ID is required", "target": null},
+      "action": "return",
+      "dismiss_target": null,
+      "max_retries": 2,
+      "message": "The form was submitted without a member ID."
+    },
+    {
+      "code": "SESSION_EXPIRED",
+      "class": "hard_failure",
+      "detect": {"kind": "text_visible", "url_pattern": null, "text": "Session expired", "target": null},
+      "action": "fail",
+      "dismiss_target": null,
+      "max_retries": 2,
+      "message": "The CoreLink session expired."
+    },
+    {
+      "code": "SIGN_ON_FAILED",
+      "class": "hard_failure",
+      "detect": {"kind": "text_visible", "url_pattern": null, "text": "Sign-on failed", "target": null},
+      "action": "fail",
+      "dismiss_target": null,
+      "max_retries": 2,
+      "message": "Operator credentials were rejected."
+    },
+    {
+      "code": "PROCESSING_HOLD",
+      "class": "recoverable",
+      "detect": {"kind": "text_visible", "url_pattern": null, "text": "Core processing hold", "target": null},
+      "action": "escalate",
+      "dismiss_target": null,
+      "max_retries": 2,
+      "message": "Unexpected core processing hold dialog."
+    }
+  ],
+  "overlays": [
+    {
+      "tenant_id": "example-cu",
+      "entry_url": null,
+      "locator_rewrites": {},
+      "extra_exception_rules": [],
+      "notes": "Same CoreLink 4.x. Put locator rewrites here if this credit union relabeled Search or moved the workspace iframe."
+    }
+  ],
+  "policy_id": "default",
+  "recorded_at": "2026-04-12T15:04:00Z",
+  "recorded_from_run_id": "seed"
+}
